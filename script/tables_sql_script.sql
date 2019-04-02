@@ -3,12 +3,29 @@
 -- DROP DATABASE flylinkdb;
 
 CREATE DATABASE flylinkdb
-  WITH OWNER = postgres
+  WITH OWNER = flylinkdb
        ENCODING = 'UTF8'
        TABLESPACE = pg_default
-       LC_COLLATE = 'Russian_Russia.1251'
-       LC_CTYPE = 'Russian_Russia.1251'
        CONNECTION LIMIT = -1;
+	   
+	   
+-- SEQUENCE: public.file_id_seq
+
+-- DROP SEQUENCE public.file_id_seq;
+
+CREATE SEQUENCE public.file_id_seq;
+
+ALTER SEQUENCE public.file_id_seq
+    OWNER TO flylinkdb;
+
+-- SEQUENCE: public.user_id_seq
+
+-- DROP SEQUENCE public.user_id_seq;
+
+CREATE SEQUENCE public.user_id_seq;
+
+ALTER SEQUENCE public.user_id_seq
+    OWNER TO flylinkdb;	   
 
 -- Table: public."user"
 
@@ -40,7 +57,8 @@ CREATE TABLE public.file
   type character varying(20),
   size bigint,
   path character varying(100),
-  uploader_id integer NOT NULL DEFAULT nextval('file_uploader_id_seq'::regclass),
+  uploader_id integer,
+  upload_date character varying(20)[],
   CONSTRAINT file_id PRIMARY KEY (id),
   CONSTRAINT fk_user_id FOREIGN KEY (uploader_id)
       REFERENCES public."user" (id) MATCH SIMPLE
