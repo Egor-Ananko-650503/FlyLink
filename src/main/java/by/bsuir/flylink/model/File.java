@@ -3,12 +3,14 @@ package by.bsuir.flylink.model;
 import org.springframework.core.io.Resource;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "file")
 public class File {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_id_seq")
+    @SequenceGenerator(name = "file_id_gen", sequenceName = "file_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(generator = "file_id_gen")
     private Long id;
 
     private String name;
@@ -19,18 +21,21 @@ public class File {
 
     private String path;
 
+    @Column(name = "upload_date")
+    private LocalDateTime dateTime;
+
     @Column(name = "uploader_id")
     private Long uploaderId;
 
     public File() {
     }
 
-    public File(Long id, String name, String type, Long size, String path, Long uploaderId) {
-        this.id = id;
+    public File(String name, String type, Long size, String path, LocalDateTime dateTime, Long uploaderId) {
         this.name = name;
         this.type = type;
         this.size = size;
         this.path = path;
+        this.dateTime = dateTime;
         this.uploaderId = uploaderId;
     }
 
@@ -72,6 +77,14 @@ public class File {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
     public Long getUploaderId() {

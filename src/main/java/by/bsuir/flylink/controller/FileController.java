@@ -1,12 +1,16 @@
 package by.bsuir.flylink.controller;
 
+import by.bsuir.flylink.exception.FileStorageException;
+import by.bsuir.flylink.model.File;
 import by.bsuir.flylink.playload.UploadFileResponse;
+import by.bsuir.flylink.service.FileService;
 import by.bsuir.flylink.service.FileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +19,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api")
 public class FileController {
 
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
@@ -27,17 +34,31 @@ public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private FileService fileService;
+
     @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
+        try {
+            String path = fileStorageService.storeFile(file);
+            File newFile = new File(
+                    file.getOriginalFilename(),
+                    file.getContentType(),
+                    file.getSize(),
+                    path,
+                    LocalDateTime.now(),
+                    1L
+            );
+            fileService.saveFile(newFile);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
-                .path(fileName)
-                .toUriString();
+            //TODO: Replace hardcoded '1' to user id when it will be possible
 
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+            return new UploadFileResponse(file.getOriginalFilename(), file.getContentType(), file.getSize(), "OK");
+        } catch (FileStorageException ex) {
+            logger.info(ex.getMessage());
+        }
+
+        return new UploadFileResponse(file.getOriginalFilename(), file.getContentType(), file.getSize(), "FAIL");
     }
 
     @PostMapping("/uploadMultipleFiles")
@@ -69,5 +90,16 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    @GetMapping("/test/downloadFile/{fileName:.+}")
+    public ResponseEntity<File> testDownloadFile(@PathVariable String fileName) {
+        Optional<File> optFile = fileService.findByName(fileName);
+        return optFile.map(file -> new ResponseEntity<>(file, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PostMapping("/test/uploadFile")
+    public ResponseEntity<File> testUploadFile(@RequestBody File file) {
+        return new ResponseEntity<>(fileService.saveFile(file), HttpStatus.OK);
     }
 }

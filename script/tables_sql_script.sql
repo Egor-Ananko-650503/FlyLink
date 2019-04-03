@@ -58,7 +58,7 @@ CREATE TABLE public.file
   size bigint,
   path character varying(100),
   uploader_id integer,
-  upload_date character varying(20)[],
+  upload_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
   CONSTRAINT file_id PRIMARY KEY (id),
   CONSTRAINT fk_user_id FOREIGN KEY (uploader_id)
       REFERENCES public."user" (id) MATCH SIMPLE
