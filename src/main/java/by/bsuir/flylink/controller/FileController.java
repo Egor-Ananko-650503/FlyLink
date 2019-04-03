@@ -15,14 +15,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -92,14 +90,8 @@ public class FileController {
                 .body(resource);
     }
 
-    @GetMapping("/test/downloadFile/{fileName:.+}")
-    public ResponseEntity<File> testDownloadFile(@PathVariable String fileName) {
-        Optional<File> optFile = fileService.findByName(fileName);
-        return optFile.map(file -> new ResponseEntity<>(file, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @PostMapping("/test/uploadFile")
-    public ResponseEntity<File> testUploadFile(@RequestBody File file) {
-        return new ResponseEntity<>(fileService.saveFile(file), HttpStatus.OK);
+    @GetMapping("/listAll")
+    public ResponseEntity<List<File>> showAllFiles() {
+        return new ResponseEntity<>(fileService.listAll(), HttpStatus.OK);
     }
 }
