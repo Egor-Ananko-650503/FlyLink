@@ -12,7 +12,7 @@
 #### Диаграмма классов
 ![Диаграмма классов](diagrams/ClassDiagramm.jpg)
 ##### Диаграмма компонентов
-![Диаграмма компонентов](diagrams/ComponentDiagramm.jpg)
+![Диаграмма компонентов](diagrams/ComponentDiagram.jpg)
 ##### Диаграмма развертывания
 ![Диаграмма развертывания](diagrams/DeploymentDiagramm.jpg)
 ##### Диаграмма развертывания ToBe
