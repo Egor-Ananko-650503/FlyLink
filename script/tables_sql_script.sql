@@ -54,7 +54,7 @@ CREATE TABLE public.file
 (
   id integer NOT NULL DEFAULT nextval('file_id_seq'::regclass),
   name character varying(80),
-  type character varying(20),
+  type character varying(40),
   size bigint,
   path character varying(100),
   uploader_id integer,
