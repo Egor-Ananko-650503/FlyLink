@@ -7,8 +7,8 @@ CREATE DATABASE flylinkdb
        ENCODING = 'UTF8'
        TABLESPACE = pg_default
        CONNECTION LIMIT = -1;
-	   
-	   
+
+
 -- SEQUENCE: public.file_id_seq
 
 -- DROP SEQUENCE public.file_id_seq;
@@ -44,7 +44,7 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public."user"
-  OWNER TO postgres;
+    OWNER TO flylinkdb;
 
 -- Table: public.file
 
@@ -68,4 +68,4 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE public.file
-  OWNER TO postgres;
+    OWNER TO flylinkdb;
