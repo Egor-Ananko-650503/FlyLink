@@ -19,11 +19,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.postgresql:postgresql'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'org.springframework.security:spring-security-test'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
 //    runtimeOnly 'org.postgresql:postgresql'
+
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 //    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.5'
 //    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.1.Final'
 }
