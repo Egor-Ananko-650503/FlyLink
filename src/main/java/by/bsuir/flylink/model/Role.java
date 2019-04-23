@@ -11,32 +11,32 @@ public class Role {
     @Id
     @SequenceGenerator(name = "role_id_gen", sequenceName = "role_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "role_id_gen")
-    private int id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @NaturalId
-    private String name;
+    private RoleName name;
 
     public Role() {
     }
 
-    public Role(String name) {
+    public Role(RoleName name) {
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getName() {
+    public RoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(RoleName name) {
         this.name = name;
     }
 }

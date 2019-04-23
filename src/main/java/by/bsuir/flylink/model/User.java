@@ -15,7 +15,7 @@ public class User {
     @Id
     @SequenceGenerator(name = "user_id_gen", sequenceName = "user_id_seq", allocationSize = 1)
     @GeneratedValue(generator = "user_id_gen")
-    private int id;
+    private Long id;
 
     @NotEmpty(message = "*Please provide your name")
     private String name;
@@ -48,11 +48,11 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
