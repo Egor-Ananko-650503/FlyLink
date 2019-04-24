@@ -12,7 +12,7 @@ public class SignUpRequest {
 
     @NotBlank
     @Size(min = 5, max = 32)
-    private String userName;
+    private String login;
 
     @NotBlank
     @Size(max = 50)
@@ -31,12 +31,12 @@ public class SignUpRequest {
         this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getEmail() {

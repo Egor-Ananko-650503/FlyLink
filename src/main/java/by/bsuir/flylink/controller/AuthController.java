@@ -53,7 +53,7 @@ public class AuthController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequestequest.getUsernameOrEmail(),
+                        loginRequestequest.getLoginOrEmail(),
                         loginRequestequest.getPassword()
                 )
         );
@@ -68,18 +68,18 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
-        if (userRepository.existsByLogin(signUpRequest.getUserName())) {
-            return new ResponseEntity(new ApiResponse(false, "Login is already taken"),
+        if (userRepository.existsByLogin(signUpRequest.getLogin())) {
+            return new ResponseEntity<>(new ApiResponse(false, "Login is already taken"),
                     HttpStatus.BAD_REQUEST);
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity(new ApiResponse(false, "Email address is already in use!"),
+            return new ResponseEntity<>(new ApiResponse(false, "Email address is already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        User user = new User(signUpRequest.getName(), signUpRequest.getUserName(),
-                signUpRequest.getEmail(), signUpRequest.getPassword());
+        User user = new User(signUpRequest.getName(), signUpRequest.getEmail(),
+                signUpRequest.getLogin(), signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
