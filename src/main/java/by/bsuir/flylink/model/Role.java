@@ -6,11 +6,11 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "role")
+@Table(name = "fl_role", schema = "public")
 public class Role {
     @Id
-    @SequenceGenerator(name = "role_id_gen", sequenceName = "role_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "role_id_gen")
+    @SequenceGenerator(name = "fl_role_id_gen", sequenceName = "fl_role_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "fl_role_id_gen")
     private Long id;
 
     @Enumerated(EnumType.STRING)

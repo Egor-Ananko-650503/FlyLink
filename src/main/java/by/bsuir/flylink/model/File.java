@@ -6,11 +6,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "file")
+@Table(name = "fl_file", schema = "public")
 public class File {
     @Id
-    @SequenceGenerator(name = "file_id_gen", sequenceName = "file_id_seq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(generator = "file_id_gen")
+    @SequenceGenerator(name = "fl_file_id_gen", sequenceName = "fl_file_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(generator = "fl_file_id_gen")
     private Long id;
 
     private String name;

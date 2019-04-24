@@ -9,12 +9,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "fl_user", schema = "public")
 public class User {
 
     @Id
-    @SequenceGenerator(name = "user_id_gen", sequenceName = "user_id_seq", allocationSize = 1)
-    @GeneratedValue(generator = "user_id_gen")
+    @SequenceGenerator(name = "fl_user_id_gen", sequenceName = "fl_user_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "fl_user_id_gen")
     private Long id;
 
     @NotEmpty(message = "*Please provide your name")
@@ -33,7 +33,7 @@ public class User {
     private String password;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "fl_user_role", schema = "public",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
