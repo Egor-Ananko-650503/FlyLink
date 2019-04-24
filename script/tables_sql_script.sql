@@ -1,71 +1,74 @@
-﻿-- Database: flylinkdb
+﻿-- Scripts for creating all needed entities for application.
+-- Requirements: [Database: flylinkdb; Role: flylinkdb; Schema: public]
 
--- DROP DATABASE flylinkdb;
+create sequence fl_file_id_seq;
 
-CREATE DATABASE flylinkdb
-  WITH OWNER = flylinkdb
-       ENCODING = 'UTF8'
-       TABLESPACE = pg_default
-       CONNECTION LIMIT = -1;
+alter sequence fl_file_id_seq owner to flylinkdb;
 
+create sequence fl_user_id_seq;
 
--- SEQUENCE: public.file_id_seq
+alter sequence fl_user_id_seq owner to flylinkdb;
 
--- DROP SEQUENCE public.file_id_seq;
-
-CREATE SEQUENCE public.file_id_seq;
-
-ALTER SEQUENCE public.file_id_seq
-    OWNER TO flylinkdb;
-
--- SEQUENCE: public.user_id_seq
-
--- DROP SEQUENCE public.user_id_seq;
-
-CREATE SEQUENCE public.user_id_seq;
-
-ALTER SEQUENCE public.user_id_seq
-    OWNER TO flylinkdb;	   
-
--- Table: public."user"
-
--- DROP TABLE public."user";
-
-CREATE TABLE public."user"
+create table if not exists fl_user
 (
-  id integer NOT NULL DEFAULT nextval('user_id_seq'::regclass),
-  name character varying(80),
-  email character varying(50),
-  login character varying(20),
-  password character varying(20),
-  CONSTRAINT id PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
+    id integer default nextval('fl_user_id_seq'::regclass) not null
+        constraint fl_user_id
+            primary key,
+    name varchar(80),
+    email varchar(50),
+    login varchar(20),
+    password varchar(128)
 );
-ALTER TABLE public."user"
-    OWNER TO flylinkdb;
 
--- Table: public.file
+alter table fl_user owner to flylinkdb;
 
--- DROP TABLE public.file;
-
-CREATE TABLE public.file
+create table if not exists fl_file
 (
-  id integer NOT NULL DEFAULT nextval('file_id_seq'::regclass),
-  name character varying(80),
-  type character varying(40),
-  size bigint,
-  path character varying(100),
-  uploader_id integer,
-  upload_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-  CONSTRAINT file_id PRIMARY KEY (id),
-  CONSTRAINT fk_user_id FOREIGN KEY (uploader_id)
-      REFERENCES public."user" (id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
+    id integer default nextval('fl_file_id_seq'::regclass) not null
+        constraint fl_file_id
+            primary key,
+    name varchar(80),
+    type varchar(40),
+    size bigint,
+    path varchar(100),
+    uploader_id integer
+        constraint fk_fl_user_id
+            references fl_user (id),
+    upload_date timestamp with time zone default CURRENT_TIMESTAMP not null
 );
-ALTER TABLE public.file
-    OWNER TO flylinkdb;
+
+alter table fl_file owner to flylinkdb;
+
+create table if not exists fl_role
+(
+    id serial not null
+        constraint fl_role_pk
+            primary key,
+    name varchar(21) not null
+);
+
+alter table fl_role owner to flylinkdb;
+
+create unique index if not exists fl_role_id_uindex
+    on fl_role (id);
+
+create table if not exists fl_user_role
+(
+    id serial not null
+        constraint fl_user_role_pk
+            primary key,
+    user_id integer not null
+        constraint fk_fl_user_id
+            references fl_user
+            on update cascade on delete cascade,
+    role_id integer not null
+        constraint fk_fl_role_id
+            references fl_role
+            on update cascade on delete cascade
+);
+
+alter table fl_user_role owner to flylinkdb;
+
+create unique index if not exists user_role_id_uindex
+    on fl_user_role (id);
+
