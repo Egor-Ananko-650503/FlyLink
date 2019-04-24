@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface FileService {
     File saveFile(File file);
+
     Optional<File> findByName(String name);
+
     List<File> listAll();
 }

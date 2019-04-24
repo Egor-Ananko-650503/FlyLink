@@ -8,9 +8,9 @@ import by.bsuir.flylink.playload.ApiResponse;
 import by.bsuir.flylink.playload.JwtAuthenticationResponse;
 import by.bsuir.flylink.playload.LoginRequest;
 import by.bsuir.flylink.playload.SignUpRequest;
-import by.bsuir.flylink.repository.RoleRepository;
-import by.bsuir.flylink.repository.UserRepository;
 import by.bsuir.flylink.security.JwtTokenProvider;
+import by.bsuir.flylink.service.RoleService;
+import by.bsuir.flylink.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +37,10 @@ public class AuthController {
     AuthenticationManager authenticationManager;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
-    RoleRepository roleRepository;
+    RoleService roleService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -68,12 +68,12 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 
-        if (userRepository.existsByLogin(signUpRequest.getLogin())) {
+        if (userService.existsByLogin(signUpRequest.getLogin())) {
             return new ResponseEntity<>(new ApiResponse(false, "Login is already taken"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userService.existsByEmail(signUpRequest.getEmail())) {
             return new ResponseEntity<>(new ApiResponse(false, "Email address is already in use!"),
                     HttpStatus.BAD_REQUEST);
         }
@@ -82,11 +82,11 @@ public class AuthController {
                 signUpRequest.getLogin(), signUpRequest.getPassword());
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+        Role userRole = roleService.findByName(RoleName.ROLE_USER)
                 .orElseThrow(() -> new AppException("User Role not set"));
 
         user.setRoles(Collections.singleton(userRole));
-        User result = userRepository.save(user);
+        User result = userService.saveUser(user);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")

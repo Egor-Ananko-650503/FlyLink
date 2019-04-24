@@ -25,5 +25,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<File> listAll() { return fileRepository.findAll(); }
+    public List<File> listAll() {
+        return fileRepository.findAll();
+    }
 }
