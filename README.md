@@ -15,3 +15,7 @@ __P.S.__ Данный репозиторий содержит _backend_ прое
 #  Ссылки
 Документация (_coming soon_)  
 Task tracer: [Trello](https://trello.com/b/07D8F6Bv)
+
+[4 Лабораторная работа](docs/PairProgramming/BuslovAlexey.md)</br>
+[5 Лабораторная работа](docs/lab5.md)</br>
+[6 Лабораторная работа](docs/lab6.md)</br>
