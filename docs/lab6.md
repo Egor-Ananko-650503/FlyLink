@@ -33,3 +33,7 @@
 ![screen2](screenshots/screen2.jpg)
 
 ![screen3](screenshots/screen3.jpg)
+
+## UX после улучшения:
+
+![screen4](screenshots/screenshot4.png)
